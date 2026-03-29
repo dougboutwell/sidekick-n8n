@@ -1,5 +1,9 @@
 # n8n data is in ~/.n8n, not in this repo
 .n8n/
 
+# Environment / secrets
+.env
+.claude/.mcp.json
+
 # OS
 .DS_Store

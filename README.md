@@ -130,6 +130,22 @@ These map to the module types from the original Sidekick design:
 - **Precise schema enforcement.** n8n's Structured Output Parser is good but less tight than Zod + `Output.object()`.
 - **Lightweight deployment.** Running a Docker container vs. `npx`. Marginal for dev, matters for ephemeral/CI use.
 
+## Unsolved Problems
+
+### Anthropic Models via Vertex AI
+
+n8n has no native way to run Claude models through Google Vertex AI. This is a real obstacle for team distribution at OpenTable, where Vertex is the approved LLM gateway.
+
+**The gap:** n8n's Anthropic Chat Model node (`LmChatAnthropic`) requires a direct Anthropic API key. n8n's Google Vertex Chat Model node (`LmChatGoogleVertex`) only supports Gemini — it hardcodes a check rejecting any model not starting with `gemini`. The LangChain ecosystem has a `ChatAnthropicVertex` class, but n8n doesn't use it.
+
+**Current workaround:** Direct Anthropic API key for local development. This proves the workflow but doesn't scale to team distribution.
+
+**Possible solutions (not yet evaluated):**
+- **AWS Bedrock** — n8n has a native `LmChatAwsBedrock` node that supports Claude. If OT has Bedrock access, this is plug-and-play.
+- **Custom community node** — wrap `@langchain/anthropic`'s `ChatAnthropicVertex` in an n8n node package. ~100 lines of TypeScript, but custom code to maintain.
+- **LiteLLM or similar proxy** — run a proxy that accepts Anthropic API format, forwards to Vertex. Point the Anthropic node's Base URL at the proxy.
+- **Upstream contribution** — add Vertex support to n8n's Anthropic node or create a new `LmChatAnthropicVertex` node.
+
 ## Request Lifecycle
 
 A concrete example: executing the Jira Test workflow from Claude Code.
