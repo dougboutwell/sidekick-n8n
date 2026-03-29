@@ -1,0 +1,5 @@
+# n8n data is in ~/.n8n, not in this repo
+.n8n/
+
+# OS
+.DS_Store

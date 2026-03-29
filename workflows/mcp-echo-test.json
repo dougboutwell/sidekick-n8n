@@ -1,0 +1,54 @@
+{
+  "name": "MCP Echo Test",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "test",
+        "authentication": "none"
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpTrigger",
+      "typeVersion": 2,
+      "position": [0, 0],
+      "id": "mcp-trigger",
+      "name": "MCP Server Trigger"
+    },
+    {
+      "parameters": {
+        "name": "echo",
+        "description": "Echoes back the input message",
+        "jsCode": "return \"Echo: \" + $input.all()[0].json.message;",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string",
+              "description": "The message to echo back"
+            }
+          },
+          "required": ["message"]
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 2,
+      "position": [200, 200],
+      "id": "echo-tool",
+      "name": "Echo Tool"
+    }
+  ],
+  "connections": {
+    "Echo Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

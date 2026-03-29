@@ -1,0 +1,36 @@
+{
+  "name": "Jira Test",
+  "description": "Fetches 3 most recently updated PDDD tickets from Jira.",
+  "nodes": [
+    {
+      "name": "Start",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "name": "Find PDDD Tickets",
+      "type": "n8n-nodes-base.jira",
+      "typeVersion": 1,
+      "position": [540, 300],
+      "parameters": {
+        "resource": "issue",
+        "operation": "getAll",
+        "returnAll": false,
+        "limit": 3,
+        "options": {
+          "jql": "project = PDDD ORDER BY updated DESC",
+          "fields": "summary,status,assignee,updated"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [[{ "node": "Find PDDD Tickets", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}
